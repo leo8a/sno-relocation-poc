@@ -32,7 +32,7 @@ make wait-for-install-complete
 make vdu
 ```
 
-- Once the installation is complete create the image template:
+- Once the installation is complete, create the image template:
 ```bash
 make bake
 ```
@@ -45,16 +45,17 @@ To do so, the credentials for writing in $BACKUP_REPO must be in an environment 
 make ostree-backup BACKUP_REPO=quay.io/whatever/ostmagic
 ```
 
-This will backup /var and /etc changes in an OCI container.
+This will back up /var and /etc changes in an OCI container.
 
-- Once the preparation is complete, we should shutdown and undefine the VM
+- Once the preparation is complete, we should shut down and undefine the VM
 ```bash
 make stop-baked-vm
 ```
 
-This will shutdown the VM and remove it from the hypervisor, leaving us wih the prepaired qcow2 image in /var/lib/libvirt/images/sno-test.qcow2.
+This will shut down the VM and remove it from the hypervisor,
+leaving us with the prepared qcow2 image in /var/lib/libvirt/images/sno-test.qcow2.
 
-- Create the site-config iso wiht the configuration for the SNO instance at edge site:
+- Create the site-config iso with the configuration for the SNO instance at edge site:
 ```bash
 make site-config.iso CLUSTER_NAME=new-name BASE_DOMAIN=foo.com
 ```
@@ -76,7 +77,7 @@ make start-vm CLUSTER_NAME=new-name BASE_DOMAIN=foo.com
 
 ### Restore OSTree relocation image into existing SNO
 #### Prerequisites
-- A image must be created before with `make ostree-backup` (see above)
+- An image must be created before with `make ostree-backup` (see above)
 - The ssh key bootstrap-in-place-poc/ssh-key/key.pub must be authorized for the user core in the recipient SNO
 - `BACKUP_SECRET` environment variable must be set as explained above
 #### Procedure
@@ -115,7 +116,7 @@ export PULL_SECRET=$(jq -c . /path/to/my/pull-secret.json)
 export BACKUP_SECRET=$(jq -c . /path/to/my/repo/credentials.json)
 ```
 #### Creation of relocatable image
-- Create new VM, apply the vDU profile, the relocation needed things, and create an ostree backup:
+- Create new VM, apply the vDU profile, the relocation-needed things, and create an ostree backup:
 ```
 make start-iso-abi wait-for-install-complete vdu bake ostree-backup stop-baked-vm BACKUP_REPO=$BACKUP_REPO
 ```
