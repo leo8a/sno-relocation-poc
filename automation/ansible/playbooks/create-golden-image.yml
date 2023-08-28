@@ -1,0 +1,40 @@
+---
+- name: "Create Golden image from Relocatable cluster"
+  hosts: "relocatable_clusters"
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    - name: "Create maintenance label in relocatable cluster(s)"
+      k8s:
+        state: patched
+        api_version: cluster.open-cluster-management.io/v1
+        kind: ManagedCluster
+        name: "{{ inventory_hostname }}"
+        definition:
+          metadata:
+            labels:
+              ingrade-workflow: "running"
+      register: maintenance_label_set
+
+  tasks:
+#    - name: "This is just a placeholder for a sample role"
+#      include_role:
+#        name: ../roles/cool-vz-role-goes-here
+#      vars:
+#        custom_var_1: "{{ custom_var_1 }}"
+#        custom_var_2: "{{ custom_var_2 }}"
+#      when: maintenance_label_set is changed
+
+  post_tasks:
+    - name: "Set (in)grade label to completed in relocatable cluster(s)"
+      k8s:
+        state: patched
+        api_version: cluster.open-cluster-management.io/v1
+        kind: ManagedCluster
+        name: "{{ inventory_hostname }}"
+        definition:
+          metadata:
+            labels:
+              ingrade-workflow: "completed"
+      when: maintenance_label_set is changed
